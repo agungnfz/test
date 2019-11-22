@@ -12,7 +12,20 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
-Route::get('/siswa', 'SiswaController@index');
+Route::get('/login', 'AuthController@login')->name('login');
+
+Route::get('/logout', function(){
+   Auth::logout();
+   return Redirect::to('login');
+});
+
+Route::post('/postlogin', 'AuthController@postlogin');
+
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/dashboard', 'DashboardController@index');
+	Route::get('/siswa', 'SiswaController@index');
+});
+
